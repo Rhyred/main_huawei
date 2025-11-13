@@ -1,0 +1,22 @@
+CREATE TABLE IF NOT EXISTS `firewall_rules` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `chain` VARCHAR(255) NOT NULL,
+  `action` VARCHAR(255) NOT NULL,
+  `srcAddress` VARCHAR(255),
+  `dstAddress` VARCHAR(255),
+  `protocol` VARCHAR(255),
+  `dstPort` VARCHAR(255),
+  `comment` TEXT,
+  `enabled` BOOLEAN DEFAULT true,
+  `createdAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  `updatedAt` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS `firewall_activity_logs` (
+  `id` INT AUTO_INCREMENT PRIMARY KEY,
+  `ruleId` INT,
+  `action` VARCHAR(255) NOT NULL,
+  `details` TEXT,
+  `timestamp` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (ruleId) REFERENCES firewall_rules(id) ON DELETE SET NULL
+);
