@@ -1,10 +1,12 @@
 import { NextResponse } from 'next/server';
-import pool from '@/lib/db';
+import { db } from '@/lib/db';
+import { firewallActivityLogs } from '@/lib/db/schema';
+import { desc } from 'drizzle-orm';
 
 export async function GET() {
     try {
-        const [rows] = await pool.query('SELECT * FROM firewall_activity_logs ORDER BY timestamp DESC');
-        return NextResponse.json(rows);
+        const logs = await db.select().from(firewallActivityLogs).orderBy(desc(firewallActivityLogs.timestamp));
+        return NextResponse.json(logs);
     } catch (error) {
         return NextResponse.json({ error: 'Failed to fetch activity logs' }, { status: 500 });
     }

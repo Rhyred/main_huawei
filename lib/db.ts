@@ -1,15 +1,6 @@
-import mysql from 'mysql2/promise';
+import { drizzle } from 'drizzle-orm/neon-http';
+import { neon } from '@neondatabase/serverless';
+import * as schema from './db/schema';
 
-// Buat koneksi pool. Pool lebih efisien daripada koneksi tunggal
-// karena mereka mengelola beberapa koneksi dan mendaur ulangnya.
-const pool = mysql.createPool({
-    host: process.env.DB_HOST || 'localhost',
-    user: process.env.DB_USER || 'root',
-    password: process.env.DB_PASSWORD || '',
-    database: process.env.DB_NAME || 'huapau_db',
-    waitForConnections: true,
-    connectionLimit: 10,
-    queueLimit: 0
-});
-
-export default pool;
+const sql = neon(process.env.DATABASE_URL!);
+export const db = drizzle(sql, { schema });
